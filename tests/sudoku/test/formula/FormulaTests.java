@@ -4,12 +4,29 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import sudoku.formula.And;
+import sudoku.formula.Env;
 import sudoku.formula.Formula;
 import sudoku.formula.Not;
 import sudoku.formula.Or;
 import sudoku.formula.Var;
 
 public class FormulaTests {
+
+	@Test
+	public void testSampleFormula() {
+		// (P V Q) and ('P V R)
+		
+		Var p = new Var("P");
+		Var q = new Var("Q");
+		Var r = new Var("R");
+		
+		Formula f = new And(new Or(p,q), new Or(new Not(p),r));
+		
+		Env env = f.solve();
+		
+		Assert.assertTrue((env.get(p) || env.get(q)) 
+							&& (!env.get(p) || env.get(r)));
+	}
 	
 	@Test
 	public void testSocrates() {
