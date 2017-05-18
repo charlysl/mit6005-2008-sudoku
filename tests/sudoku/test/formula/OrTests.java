@@ -3,6 +3,7 @@ package sudoku.test.formula;
 import org.junit.Assert;
 import org.junit.Test;
 
+import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Formula;
 import sudoku.formula.Not;
@@ -36,35 +37,53 @@ public class OrTests {
 		Var a = new Var("a");
 		Var b = new Var("b");
 		Or f = new Or(a,b);
-		Assert.assertTrue(f.eval(new Env().put(a, true).put(b,true)));
-		Assert.assertTrue(f.eval(new Env().put(a, true).put(b,false)));
-		Assert.assertTrue(f.eval(new Env().put(a, false).put(b,true)));
-		Assert.assertFalse(f.eval(new Env().put(a, false).put(b,false)));
+		Assert.assertEquals(Bool.TRUE,
+			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.TRUE)));
+		Assert.assertEquals(Bool.TRUE,
+			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.FALSE)));
+		Assert.assertEquals(Bool.TRUE,
+			f.eval(new Env().put(a, Bool.FALSE).put(b,Bool.TRUE)));
+		Assert.assertEquals(Bool.FALSE,
+			f.eval(new Env().put(a, Bool.FALSE).put(b,Bool.FALSE)));
 	}
 	
 	@Test
 	public void testSolve() {
 		Var a = new Var("a");
 		Var b = new Var("b");
+
+		Formula f;
+		Env env;
 		
-		Formula f = new Or(a,b);
-		Env env = f.solve();
-		Assert.assertTrue(env.get(a) || env.get(b));
+		f = new Or(a,b);
+		env = f.solve();
+		Assert.assertEquals(Bool.TRUE, env.get(a).or(env.get(b)));
 		
 		f = new Or(a,new Not(b));
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertTrue(env.get(a) || !env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.TRUE, 
+				env.get(a).or(env.get(b).not()));
 		
 		f = new Or(new Not(a),b);
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertFalse(env.get(a));
-		Assert.assertTrue(!env.get(a) || env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.FALSE, env.get(a));
+		Assert.assertEquals(Bool.TRUE, 
+				env.get(a).not().or(env.get(b)));
 		
 		f = new Or(new Not(a), new Not(b));
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertTrue(!env.get(a) || !env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.TRUE,
+				env.get(a).not().or(env.get(b).not()));
+	}
+	
+	@Test
+	public void testToString() {
+		Assert.assertEquals("{ab}", new Or(new Var("a"),new Var("b")).toString());
+		Assert.assertEquals("{abc}", Formula.var("a")
+										.or(Formula.var("b"))
+										.or(Formula.var("c")).toString());
 	}
 }

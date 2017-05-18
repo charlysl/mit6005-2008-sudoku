@@ -20,8 +20,17 @@ public class Not extends Formula {
 	}
 
 	@Override
-	public boolean eval(Env env) {
-		return !formula.eval(env);
+	public Bool eval(Env env) {
+		return formula.eval(env).not();
 	}
 
+	@Override
+	String buildString(String str) {
+		return str + "'" + formula;
+	}
+
+	@Override
+	public String toString() {
+		return buildString("");
+	}
 }

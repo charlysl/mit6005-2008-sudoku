@@ -6,5 +6,10 @@ public class EmptyList<T> extends List<T> {
 	public String toString() {
 		return "[]";
 	}
+
+	@Override
+	public int size() {
+		return 0;
+	}
 	
 }

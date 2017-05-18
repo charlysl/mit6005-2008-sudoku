@@ -6,6 +6,7 @@ public class Cons<T> extends List<T> {
 	private List<T> rest;
 	
 	private String string;
+	private int size = -1;
 	
 	public Cons(T first, List<T> rest) {
 		this.first = first;
@@ -28,5 +29,14 @@ public class Cons<T> extends List<T> {
 		
 		string = "[" + first + rest + "]";
 		return string;
+	}
+
+	@Override
+	public int size() {
+		if (size == -1) {
+			size = 1 + rest.size();
+		}
+		
+		return size;
 	}
 }

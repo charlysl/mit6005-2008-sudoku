@@ -26,8 +26,35 @@ public class And extends Formula {
 	}
 
 	@Override
-	public boolean eval(Env env) {
-		return first.eval(env) && second.eval(env);
+	public Bool eval(Env env) {
+		return first.eval(env).and(second.eval(env));
+	}
+
+	@Override
+	String buildString(String str) {
+		
+		if (!str.isEmpty()) {
+			str += "}";
+		}
+		
+		String firstStr = getFirst().buildString(str);
+		
+		if (firstStr.charAt(0) == '{') {
+			str = firstStr;
+		} else {
+			str += "{" + firstStr + "}";
+		}
+		
+		return getSecond().buildString(str + "{") + "}";
+		
+	}
+	
+	@Override
+	public String toString() {
+//		System.out.println(getFirst());
+//		System.out.println(getSecond());
+		
+		return buildString("");
 	}
 
 }

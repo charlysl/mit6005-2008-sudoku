@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import sudoku.formula.And;
+import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Formula;
 import sudoku.formula.Not;
@@ -14,7 +15,7 @@ public class FormulaTests {
 
 	@Test
 	public void testSampleFormula() {
-		// (P V Q) and ('P V R)
+		// (P v Q) ^ ('P v R)
 		
 		Var p = new Var("P");
 		Var q = new Var("Q");
@@ -24,8 +25,25 @@ public class FormulaTests {
 		
 		Env env = f.solve();
 		
-		Assert.assertTrue((env.get(p) || env.get(q)) 
-							&& (!env.get(p) || env.get(r)));
+		Assert.assertEquals(Bool.TRUE,
+				(env.get(p).or(env.get(q))) 
+				 .and(env.get(p).not()).or(env.get(r)));
+	}
+	
+	@Test
+	public void testSampleFormulaWithFacade() {
+		Formula f = Formula.var("P").or(Formula.var("Q"))
+						.and(Formula.var("P").not().or(Formula.var("R")));
+
+		Env env = f.solve();
+		
+		Var p = new Var("P");
+		Var q = new Var("Q");
+		Var r = new Var("R");
+
+		Assert.assertEquals(Bool.TRUE,
+				(env.get(p).or(env.get(q))) 
+					.and(env.get(p).not().or(env.get(r))));
 	}
 	
 	@Test
@@ -60,4 +78,29 @@ public class FormulaTests {
 		// if the theorem is true, then the formula has no solution		
 		Assert.assertNull(f.solve());
 	}
+	
+	@Test
+	public void testSocratesFormulaWithFacade() {
+
+		Formula f = Formula.var("S").not().or(Formula.var("H"))
+					.and(Formula.var("H").not().or(Formula.var("M"))
+							.and(Formula.var("S").not()
+									.or(Formula.var("M")).not()
+							)
+					);
+		
+		Assert.assertNull(f.solve());
+	}
+	
+	@Test
+	public void testToString() {
+		Assert.assertEquals("a", Formula.var("a").toString());
+		Assert.assertEquals("{ab}", Formula.var("a")
+									.or(Formula.var("b")).toString());
+		Assert.assertEquals("{ab}{a'bc}", 
+				Formula.var("a").or(Formula.var("b"))
+					.and(Formula.var("a").or(Formula.var("b").not())
+							.or(Formula.var("c"))).toString());
+	}
+	
 }

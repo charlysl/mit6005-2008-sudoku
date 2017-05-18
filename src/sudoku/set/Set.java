@@ -105,4 +105,8 @@ public class Set<T> {
 		T first = set2.cons.getFirst();
 		return add(first).addAll(set2.remove(first));
 	}
+	
+	public int size() {
+		return rep.size();
+	}
 }

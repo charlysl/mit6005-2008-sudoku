@@ -4,9 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import sudoku.formula.And;
+import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Formula;
 import sudoku.formula.Not;
+import sudoku.formula.Or;
 import sudoku.formula.Var;
 import sudoku.set.Set;
 
@@ -36,10 +38,16 @@ public class AndTests {
 		Var a = new Var("a");
 		Var b = new Var("b");
 		And f = new And(a,b);
-		Assert.assertTrue(f.eval(new Env().put(a, true).put(b,true)));
-		Assert.assertFalse(f.eval(new Env().put(a, true).put(b,false)));
-		Assert.assertFalse(f.eval(new Env().put(a, false).put(b,true)));
-		Assert.assertFalse(f.eval(new Env().put(a, false).put(b,false)));
+		Assert.assertEquals(Bool.TRUE,
+			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.TRUE)));
+		Assert.assertEquals(Bool.FALSE,
+			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.FALSE)));
+		Assert.assertEquals(Bool.FALSE,
+			f.eval(new Env().put(a, Bool.FALSE).put(b,Bool.TRUE)));
+		Assert.assertEquals(Bool.FALSE,
+			f.eval(new Env().put(a, Bool.FALSE).put(b,Bool.FALSE)));
+		Assert.assertEquals(Bool.UNDEFINED,
+				f.eval(new Env()));
 	}
 	
 	@Test
@@ -49,25 +57,37 @@ public class AndTests {
 		
 		Formula f = new And(a,b);
 		Env env = f.solve();
-		Assert.assertTrue(env.get(a));
-		Assert.assertTrue(env.get(b));
+		Assert.assertEquals(Bool.TRUE, env.get(a));
+		Assert.assertEquals(Bool.TRUE, env.get(b));
 		
 		f = new And(a,new Not(b));
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertTrue(env.get(a));
-		Assert.assertFalse(env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.TRUE, env.get(a));
+		Assert.assertEquals(Bool.FALSE, env.get(b));
 		
 		f = new And(new Not(a),b);
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertFalse(env.get(a));
-		Assert.assertTrue(env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.FALSE, env.get(a));
+		Assert.assertEquals(Bool.TRUE, env.get(b));
 		
 		f = new And(new Not(a), new Not(b));
 		env = f.solve();
-		System.out.println(env);
-		Assert.assertFalse(env.get(a));
-		Assert.assertFalse(env.get(b));
+//		System.out.println(env);
+		Assert.assertEquals(Bool.FALSE, env.get(a));
+		Assert.assertEquals(Bool.FALSE, env.get(b));
+	}
+	
+	@Test
+	public void testToString() {
+		Assert.assertEquals("{a}{b}", Formula.var("a")
+											.and(Formula.var("b")).toString());
+		Assert.assertEquals("{a}{b}{c}", Formula.var("a")
+				.and(Formula.var("b")).and(Formula.var("c")).toString());
+		Assert.assertEquals("{ab}{cd}", new And(
+											new Or(new Var("a"),new Var("b")),
+											new Or(new Var("c"),new Var("d"))
+							).toString());
 	}
 }

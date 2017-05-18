@@ -26,8 +26,17 @@ public class Or extends Formula {
 	}
 
 	@Override
-	public boolean eval(Env env) {
-		return first.eval(env) || second.eval(env);
+	public Bool eval(Env env) {
+		return first.eval(env).or(second.eval(env));
 	}
 
+	@Override
+	public String toString() {
+		return "{" + buildString("") + "}";
+	}
+
+	@Override
+	String buildString(String str) {
+		return getSecond().buildString(getFirst().buildString(str));
+	}
 }

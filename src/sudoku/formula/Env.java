@@ -16,22 +16,29 @@ public class Env {
 		this(new Set<Var>(), new Set<Var>());
 	}
 	
-	public Env put(Var var, boolean b) {
+	public Env put(Var var, Bool b) {
 		
-		if ((b && trues.contains(var)) || (!b && falses.contains(var))) {
+		if ((b.equals(Bool.TRUE) && trues.contains(var)) 
+			|| (b.equals(Bool.FALSE) && falses.contains(var))) {
 			// var had already been set to b
 			return this;
 		}
 
-		return	b	? new Env(trues.add(var), 	falses.remove(var))
-					: new Env(trues.remove(var), falses.add(var));
+		return	b.equals(Bool.TRUE) 
+				? new Env(trues.add(var), 	falses.remove(var))
+				: new Env(trues.remove(var), falses.add(var));
 	}
 
-	public boolean get(Var var) {
+	public Bool get(Var var) {
 		if (trues.contains(var)) {
-			return true;
+			return Bool.TRUE;
+		} else if (falses.contains(var)) {
+			return Bool.FALSE;
 		} else {
-			return false;
+			// This is the whole point of defining Bool
+			// instead of just using boolean, to be able 
+			// to return UNDEFINED if Var not put.
+			return Bool.UNDEFINED;
 		}
 	}
 
