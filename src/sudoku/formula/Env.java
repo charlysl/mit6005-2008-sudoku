@@ -1,8 +1,10 @@
 package sudoku.formula;
 
+import java.util.Iterator;
+
 import sudoku.set.Set;
 
-public class Env {
+public class Env implements Iterable<Var> {
 
 	Set<Var> trues; // contains all vars that are true
 	Set<Var> falses; // constains all vars that are false
@@ -45,5 +47,45 @@ public class Env {
 	@Override
 	public String toString() {
 		return "TRUE" + trues.toString() + " " + "FALSE" + falses.toString();
+	}
+	
+	public int size() {
+		return trues.size() + falses.size();
+	}
+
+	@Override
+	public Iterator<Var> iterator() {
+		return new Iterator<Var>() {
+			
+			// first iterate over trues, and then over falses
+			Iterator<Var> truesIter = trues.iterator();
+			Iterator<Var> falsesIter = falses.iterator();
+			boolean isTrues = true;
+			
+			@Override
+			public boolean hasNext() {
+				
+				// check if truesIter has been exhausted
+				if (isTrues && !truesIter.hasNext()) {
+					// switch to falsesIter
+					isTrues = false;
+				}
+				
+				return isTrues	? truesIter.hasNext()
+								: falsesIter.hasNext();
+				
+			}
+			
+			@Override
+			public Var next() {
+				return isTrues	? truesIter.next()
+								: falsesIter.next();
+			}
+			
+			@Override
+			public void remove() {
+				// empty
+			}
+		};
 	}
 }

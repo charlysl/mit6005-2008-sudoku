@@ -1,12 +1,20 @@
 package sudoku.set;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import sudoku.list.Cons;
 import sudoku.list.EmptyList;
 import sudoku.list.List;
 
-public class Set<T> {
+public class Set<T> implements Iterable<T> {
 	private List<T> rep;
 	private Cons<T> cons; // null only if empty
+	
+	// profiling showed that over 50% of the time was spent in Set#contains
+	// caching is an attempt to improve this
+	private Map<T,Boolean> containsCache = new HashMap<T,Boolean>();
 	
 	public Set(T t) {
 		rep = new Cons<T>(t, new EmptyList<T>());
@@ -80,15 +88,29 @@ public class Set<T> {
 	}
 
 	public boolean contains(T t) {
+		// First check if result is in cache; if not then get result and cache it.
+		//		
+		// The cache caches both hits (mapped to true) and misses (mapped to false).
+		// This is fine, because Set is immutable, so a hit will always be a hit,
+		// and a miss will always be a miss.
+		
+		Boolean result = containsCache.get(t);
+		if (result != null) {
+			return result;
+		}
+		
 		if (isEmpty()) {
-			return false;
+			result = Boolean.FALSE;
+		} else if (cons.getFirst().equals(t)) {
+			result = Boolean.TRUE;
+		} else {
+			result = new Set<T>(cons.getRest()).contains(t);			
 		}
 		
-		if (cons.getFirst().equals(t)) {
-			return true;
-		}
+		// cache result
+		containsCache.put(t, result);
 		
-		return new Set<T>(cons.getRest()).contains(t);
+		return result;
 	}
 	
 	@Override
@@ -108,5 +130,36 @@ public class Set<T> {
 	
 	public int size() {
 		return rep.size();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+				
+		return new Iterator<T>() {
+
+			// This list is a copy of rep.
+			// In each iteration first will be returned,
+			// and the list reduced to the rest. 
+			// In the last iteration it will be empty.
+			List<T> list = rep;
+
+			@Override
+			public boolean hasNext() {
+				return list instanceof Cons<?>;
+			}
+
+			@Override
+			public T next() {
+				Cons<T> cons = (Cons<T>) list;
+				T next = cons.getFirst();
+				list = cons.getRest();
+				return next;
+			}
+
+			@Override
+			public void remove() {
+				// empty
+			}
+		};
 	}
 }

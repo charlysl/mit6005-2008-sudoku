@@ -97,4 +97,19 @@ public class SetTest {
 		Assert.assertTrue(set.contains(o));
 		Assert.assertTrue(set.contains(o2));
 	}
+	
+	@Test
+	public void testIterable() {
+		Set<Object> set = new Set<>();
+		for (Object o : set) {
+		}
+		
+		Object o = new Object();
+		set = new Set<>(o);
+		int c = 0;
+		for (Object e : set) {
+			c++;
+		}
+		Assert.assertEquals(1, c);
+	}
 }

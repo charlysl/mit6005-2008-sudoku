@@ -7,7 +7,7 @@ public abstract class Formula {
 	public Env solve() {
 		return solve(new Env(), vars());
 	}
-	
+		
 	private Env solve(Env env, Set<Var> variables) {
 		
 //		System.out.println("env: " + env);
@@ -44,6 +44,16 @@ public abstract class Formula {
 			return solution;
 		}
 	}
+
+	public Env solve(Env partial) {
+		// call vars() and remove all variables that are in partial
+		//   to accomplish this, make Set and Env iterable
+		Set<Var> remainingVars = vars();
+		for (Var v : partial) {
+			remainingVars = remainingVars.remove(v);
+		}
+		return solve(partial, remainingVars);
+	}	
 	
 	public abstract Set<Var> vars();
 	abstract Bool eval(Env env);

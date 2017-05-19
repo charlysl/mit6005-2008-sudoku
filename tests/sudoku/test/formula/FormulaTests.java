@@ -32,8 +32,7 @@ public class FormulaTests {
 	
 	@Test
 	public void testSampleFormulaWithFacade() {
-		Formula f = Formula.var("P").or(Formula.var("Q"))
-						.and(Formula.var("P").not().or(Formula.var("R")));
+		Formula f = getSampleFormula();
 
 		Env env = f.solve();
 		
@@ -101,6 +100,39 @@ public class FormulaTests {
 				Formula.var("a").or(Formula.var("b"))
 					.and(Formula.var("a").or(Formula.var("b").not())
 							.or(Formula.var("c"))).toString());
+	}
+
+	@Test
+	public void testPartialSolution() {
+		Var a = new Var("a");
+		Env partial = new Env();
+		partial = partial.put(a, Bool.TRUE);
+		Env solution = a.solve(partial);
+		Assert.assertEquals(1, solution.size());
+		Assert.assertEquals(Bool.TRUE, solution.get(a));
+		
+		Formula f = getSampleFormula();
+		partial = new Env();
+		Var p = new Var("P");
+		Var r = new Var("R");
+		partial = partial.put(p, Bool.TRUE);
+//		partial = partial.put(r, Bool.TRUE);
+		solution = f.solve(partial);
+		Assert.assertEquals(Bool.TRUE, solution.get(p));
+//		Assert.assertEquals(Bool.TRUE, solution.get(r));
+	}
+	
+	@Test
+	public void testWrongPartialSolution() {
+		Var a = new Var("a");
+		Env partial = new Env();
+		partial = partial.put(a, Bool.FALSE);
+		Assert.assertNull(a.solve(partial));
+	}
+
+	private Formula getSampleFormula() {
+		return Formula.var("P").or(Formula.var("Q"))
+				.and(Formula.var("P").not().or(Formula.var("R")));
 	}
 	
 }

@@ -6,6 +6,7 @@ import org.junit.Test;
 import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Var;
+import sudoku.set.Set;
 
 public class EnvTests {
 	
@@ -36,4 +37,28 @@ public class EnvTests {
 		
 		Assert.assertEquals(Bool.UNDEFINED, env.get(new Var("c")));		
 	}
+	
+	@Test
+	public void testIterable() {
+		Env env = new Env();
+		for (Var v : env) {
+		}
+		
+		Var v = new Var("a");
+		env = env.put(v, Bool.TRUE);
+		int c = 0;
+		for (Var e : env) {
+			Assert.assertEquals(v, e);
+			c++;
+		}
+		Assert.assertEquals(1, c);
+		
+		env = env.put(v, Bool.FALSE);
+		c = 0;
+		for (Var e : env) {
+			Assert.assertEquals(v, e);
+			c++;
+		}
+		Assert.assertEquals(1, c);
+	}	
 }

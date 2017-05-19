@@ -61,6 +61,20 @@ public class VarTests {
 		Assert.assertNotEquals(a, c);
 		Assert.assertNotEquals(c, a);
 	}
+
+	@Test
+	public void testHashCode() {
+		Var a = new Var("A");
+		Assert.assertEquals(a.hashCode(), "A".hashCode());
+		
+		Var b = new Var("A");
+		Assert.assertEquals(a.hashCode(), b.hashCode());
+		Assert.assertEquals(b.hashCode(), a.hashCode());
+		
+		Var c = new Var("C");
+		Assert.assertNotEquals(a.hashCode(), c.hashCode());
+		Assert.assertNotEquals(c.hashCode(), a.hashCode());
+	}
 	
 	@Test
 	public void testToString() {

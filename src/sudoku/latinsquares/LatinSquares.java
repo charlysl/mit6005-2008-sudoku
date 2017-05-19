@@ -7,6 +7,17 @@ import sudoku.formula.Var;
 
 public class LatinSquares {
 
+	public static void main(String[] args) {
+		LatinSquares l = new LatinSquares(2);
+		
+		Formula f = l.getFormula();
+		
+//		System.out.println(f);
+//		System.out.println(f.vars());
+		Env env = f.solve();
+		System.out.println(l.interpretResult(env));
+	}
+	
 	private int dim;
 	
 	public LatinSquares(int dim) {
