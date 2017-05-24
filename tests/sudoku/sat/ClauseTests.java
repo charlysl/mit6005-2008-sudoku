@@ -33,65 +33,82 @@ public class ClauseTests {
 	@Test
 	public void testReduce() {
 		Clause clause = new Clause();
+		Clause reduced;
 		Env env;
 		env = new Env();
 
 		clause = clause.reduce(env);
 		Assert.assertTrue(clause.isEmpty());
 		
-		Literal plit = new PosLiteral("a");
-		clause = clause.add(plit);
+		Literal a = new PosLiteral("a");
+		clause = clause.add(a);
 		
-		Assert.assertEquals("{a}", clause.reduce(env).toString());
+		// {a} with "a" UNDEFINED must reduce to same {a}
+		reduced = clause.reduce(env);
+		Assert.assertTrue(reduced == clause);
+		Assert.assertEquals("{a}", reduced.toString());
 		
+		// {a} with "a" TRUE must reduce to null
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.TRUE);
+		env = env.put(a.getVar(), Bool.TRUE);
 		Assert.assertNull(clause.reduce(env));
 
+		// {a} with "a" FALSE must reduce to {}
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.FALSE);
+		env = env.put(a.getVar(), Bool.FALSE);
 		Assert.assertTrue(clause.reduce(env).isEmpty());
 
-		Literal nlit = new NegLiteral("b");
-		clause = clause.add(nlit);
+		Literal b = new NegLiteral("b");
+		clause = clause.add(b);
 
+		// {!ba} with "a" and "b" UNDEFINED must reduce same {!ba}
 		env = new Env();
-		Assert.assertEquals("{a!b}", clause.reduce(env).toString());		
+		reduced = clause.reduce(env);
+		Assert.assertTrue(reduced == clause);
+		Assert.assertEquals("{!ba}", reduced.toString());		
 		
+		// {!ba} with "a" UNDEFINED and "b" FALSE must reduce to null
 		env = new Env();
-		env = env.put(nlit.getVar(), Bool.FALSE);
+		env = env.put(b.getVar(), Bool.FALSE);
 		Assert.assertNull(clause.reduce(env));
 		
+		// {!ba} with "a" TRUE and "b" UNDEFINED must reduce to null
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.TRUE);
+		env = env.put(a.getVar(), Bool.TRUE);
 		Assert.assertNull(clause.reduce(env));
 		
+		// {!ba} with "a" UNDEFINED and "b" TRUE must reduce to {a}
 		env = new Env();
-		env = env.put(nlit.getVar(), Bool.TRUE);
+		env = env.put(b.getVar(), Bool.TRUE);
 		Assert.assertEquals("{a}", clause.reduce(env).toString());
 		
+		// {!ba} with "a" FALSE and "b" UNDEFINED must reduce to {!b}
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.FALSE);
+		env = env.put(a.getVar(), Bool.FALSE);
 		Assert.assertEquals("{!b}", clause.reduce(env).toString());
 		
+		// {!ba} with "a" TRUE and "b" FALSE must reduce to null
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.TRUE);
-		env = env.put(nlit.getVar(), Bool.FALSE);
+		env = env.put(a.getVar(), Bool.TRUE);
+		env = env.put(b.getVar(), Bool.FALSE);
 		Assert.assertNull(clause.reduce(env));
 		
+		// {!ba} with "a" FALSE and "b" TRUE must reduce to {}
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.FALSE);
-		env = env.put(nlit.getVar(), Bool.TRUE);
+		env = env.put(a.getVar(), Bool.FALSE);
+		env = env.put(b.getVar(), Bool.TRUE);
 		Assert.assertTrue(clause.reduce(env).isEmpty());
 		
+		// {!ba} with "a" TRUE and "b" TRUE must reduce to null
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.TRUE);
-		env = env.put(nlit.getVar(), Bool.TRUE);
+		env = env.put(a.getVar(), Bool.TRUE);
+		env = env.put(b.getVar(), Bool.TRUE);
 		Assert.assertNull(clause.reduce(env));
 		
+		// {!ba} with "a" FALSE and "b" FALSE must reduce to null
 		env = new Env();
-		env = env.put(plit.getVar(), Bool.FALSE);
-		env = env.put(nlit.getVar(), Bool.FALSE);
+		env = env.put(a.getVar(), Bool.FALSE);
+		env = env.put(b.getVar(), Bool.FALSE);
 		Assert.assertNull(clause.reduce(env));
 		
 	}

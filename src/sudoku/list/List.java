@@ -2,9 +2,6 @@ package sudoku.list;
 
 import java.util.Iterator;
 
-import sudoku.formula.Var;
-import sudoku.sat.Clause;
-
 public abstract class List<T> implements Iterable<T> {
 	public abstract int size();
 

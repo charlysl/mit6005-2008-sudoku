@@ -16,17 +16,20 @@ public class SatFormula {
 		return solve(new Env(), vars());
 	}
 	
+//	private static long depth;
+//	private static long nreduce;
+	
 	public Env solve(Env env, Set<Var> vars) {
 		
 //		System.out.println("sat: " + this);
 //		System.out.println("env: " + env);
 //		System.out.println("var: " + vars);
 		
-		long start;
-		start = System.nanoTime();
+//		long start;
+//		start = System.nanoTime();
 		SatFormula reduced = reduce(env);
-		System.out.println("reduced " + "vars: " + vars.size() 
-			+ " clauses: " + clauses.size() + " sec: " + (System.nanoTime() - start)/1e9);
+//		System.out.println(depth + " reduced#" + nreduce++ + " vars:" + vars.size() 
+//			+ " clauses:" + clauses.size() + " sec:" + (System.nanoTime() - start)/1e9);
 
 //		System.out.println("RED: " + reduced);		
 //		try {
@@ -55,16 +58,20 @@ public class SatFormula {
 		Literal pickedLiteral = minClause.pickLiteral();
 		
 		Var pickedVar = pickedLiteral.getVar();
-		System.out.println("picked: " + pickedVar);
+//		System.out.println("picked: " + pickedVar);
 		
 		// split
-				
+		
+//		depth++;
+		
 		Env env2 = reduced.solve(env.put(pickedVar, pickedLiteral.neg()), vars.remove(pickedVar));
 		if (env2 == null) {
-			return reduced.solve(env.put(pickedVar, pickedLiteral.bool()), vars.remove(pickedVar));
-		} else {
-			return env2;
+			env2 = reduced.solve(env.put(pickedVar, pickedLiteral.bool()), vars.remove(pickedVar));
 		}
+
+//		depth--;
+		
+		return env2;
 	}
 	
 	boolean isEmpty() {

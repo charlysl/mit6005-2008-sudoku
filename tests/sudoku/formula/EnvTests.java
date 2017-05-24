@@ -3,11 +3,6 @@ package sudoku.formula;
 import org.junit.Assert;
 import org.junit.Test;
 
-import sudoku.formula.Bool;
-import sudoku.formula.Env;
-import sudoku.formula.Var;
-import sudoku.set.Set;
-
 public class EnvTests {
 	
 	@Test
@@ -43,7 +38,7 @@ public class EnvTests {
 	@Test
 	public void testIterable() {
 		Env env = new Env();
-		for (Var v : env) {
+		for (@SuppressWarnings("unused") Var v : env) {
 		}
 		
 		Var v = Var.makeVar("a");

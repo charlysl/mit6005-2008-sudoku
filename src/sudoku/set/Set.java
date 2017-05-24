@@ -1,8 +1,6 @@
 package sudoku.set;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import sudoku.list.Cons;
 import sudoku.list.EmptyList;

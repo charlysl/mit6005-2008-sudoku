@@ -80,14 +80,10 @@ public class SatFormulaTests {
 		// use facade, the code is much more readable
 		
 		SatFormula sat;
-		Clause clause;
-		Env env;
 
 		sat = new SatFormula().clause().pos("a");
 		Assert.assertEquals("TRUE[a] FALSE[]", sat.solve().toString());
 		
-		Literal b = new NegLiteral("b");
-
 		sat = new SatFormula().clause().neg("b");
 		Assert.assertEquals("TRUE[] FALSE[b]", sat.solve().toString());
 

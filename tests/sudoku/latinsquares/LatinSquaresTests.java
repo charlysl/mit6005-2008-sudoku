@@ -1,13 +1,9 @@
 package sudoku.latinsquares;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Formula;
 import sudoku.formula.Var;
-import sudoku.latinsquares.LatinSquaresFormula;
 
 public class LatinSquaresTests {
 
@@ -37,6 +33,8 @@ public class LatinSquaresTests {
 	
 //	@Test
 	public void testPartialSolution() {
+		// this test takes a few seconds
+		
 		LatinSquaresFormula l = new LatinSquaresFormula(2);
 		Formula f = l.getFormula();
 		Env partial = new Env();
@@ -51,7 +49,7 @@ public class LatinSquaresTests {
 		partial = partial.put(C101, Bool.TRUE);
 		partial = partial.put(C110, Bool.TRUE);
 		Env env = f.solve(partial);
-//		System.out.println(l.interpretResult(env));
+		System.out.println(l.interpretResult(env));
 		
 	}
 

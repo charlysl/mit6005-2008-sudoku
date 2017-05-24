@@ -3,7 +3,6 @@ package sudoku.sat;
 import sudoku.formula.Bool;
 import sudoku.formula.Env;
 import sudoku.formula.Var;
-import sudoku.set.Set;
 
 public abstract class Literal extends SatFormula {
 

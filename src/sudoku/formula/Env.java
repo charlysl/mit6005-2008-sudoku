@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import sudoku.list.Cons;
-import sudoku.list.EmptyList;
-import sudoku.list.List;
-
 public class Env implements Iterable<Var> {
 
 	// This rep is much much faster than List<Var>, which

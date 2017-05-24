@@ -1,8 +1,6 @@
 package sudoku.sat;
 
 import sudoku.formula.Bool;
-import sudoku.formula.Env;
-import sudoku.formula.Var;
 
 public class NegLiteral extends Literal {
 

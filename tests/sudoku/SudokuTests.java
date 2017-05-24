@@ -9,7 +9,7 @@ import sudoku.sat.SatFormula;
 
 public class SudokuTests {
 
-//	@Test
+	@Test
 	public void testSquareAtMost() {
 		Sudoku sudoku = new Sudoku(2);
 		SatFormula sat;
@@ -22,17 +22,19 @@ public class SudokuTests {
 		
 	}
 	
-//	@Test
+	@Test
 	public void testSudoku4x4() {
 		Sudoku sudoku = new Sudoku(2);
 		SatFormula sat;
+//		Env env;
 		sat = new SatFormula();
 		sat = sudoku.getFormula();
-		System.out.println(sat);
-		long start = System.nanoTime();
-		Env env = sat.solve();
-		System.out.println("ms: " + (System.nanoTime() - start)/1e6);
-		System.out.println(sudoku.interpretResult(env));
+//		System.out.println(sat);
+//		long start = System.nanoTime();
+//		env = sat.solve();
+		sat.solve();
+//		System.out.println("ms: " + (System.nanoTime() - start)/1e6);
+//		System.out.println(sudoku.interpretResult(env));
 	}
 
 	@Test
@@ -45,7 +47,7 @@ public class SudokuTests {
 				".21."
 				);
 //		System.out.println(env);
-		long start = System.nanoTime();
+//		long start = System.nanoTime();
 		env = sudoku.solve(env);
 //		System.out.println("ms: " + (System.nanoTime() - start)/1e6);
 //		System.out.println(sudoku.interpretResult(env));
@@ -62,6 +64,7 @@ public class SudokuTests {
 
 //	@Test
 	public void testEasySudoku9x9Partial() {
+		// takes ~ 14s
 		Sudoku sudoku = new Sudoku(3);
 		Env env = sudoku.envFromSolution(
 				"79....3..\n" +
@@ -72,9 +75,87 @@ public class SudokuTests {
 				"4..7.....\n" +
 				"61..9...8\n" +
 				"..23.....\n" +
-				"..9....54\n"
+				"..9....54"
 		);
+		long start = System.nanoTime();
 		env = sudoku.solve(env);
-		System.out.println(sudoku.interpretResult(env));
+		System.out.println("testEasySudoku9x9Partial ms: " 
+										+ (System.nanoTime() - start)/1e6);
+//		System.out.println(sudoku.interpretResult(env));
+		Assert.assertEquals("796854321\n" +
+							"243176985\n" +
+							"851239476\n" +
+							"137965842\n" +
+							"925418763\n" +
+							"468723519\n" +
+							"614597238\n" +
+							"582341697\n" +
+							"379682154\n", 
+							sudoku.interpretResult(env));
 	}
+	
+
+//	@Test
+	public void testHardSudoku9x9Partial() {
+		// solved in ~18s
+		Sudoku sudoku = new Sudoku(3);
+		Env env = sudoku.envFromSolution(
+				".........\n" +
+				".....3.85\n" +
+				"..1.2....\n" +
+				"...5.7...\n" +
+				"..4...1..\n" +
+				".9.......\n" +
+				"5......73\n" +
+				"..2.1....\n" +
+				"....4...9"
+		);
+		long start = System.nanoTime();
+		env = sudoku.solve(env);
+		System.out.println("testHardSudoku9x9Partial ms: " 
+										+ (System.nanoTime() - start)/1e6);
+//		System.out.println(sudoku.interpretResult(env));
+		Assert.assertEquals("987654321\n" +
+							"246173985\n" +
+							"351928746\n" +
+							"128537694\n" +
+							"634892157\n" +
+							"795461832\n" +
+							"519286473\n" +
+							"472319568\n" +
+							"863745219\n", 
+							sudoku.interpretResult(env));
+	}
+	
+//	@Test
+	public void testMitHardSudoku() {
+		// terminates in ~15s
+		Sudoku sudoku = new Sudoku(3);
+		Env env = sudoku.envFromSolution(
+				"9....3..7\n" +
+				"8.......1\n" +
+				"..32..864\n" +
+				".6..27...\n" +
+				".81..4...\n" +
+				"....3....\n" +
+				".....9352\n" +
+				".....5...\n" +
+				"1.....47."
+		);
+		long start = System.nanoTime();
+		env = sudoku.solve(env);
+		System.out.println("testHardSudoku9x9Partial ms: " 
+										+ (System.nanoTime() - start)/1e6);
+//		System.out.println(sudoku.interpretResult(env));
+		Assert.assertEquals("916843527\n" +
+							"842756931\n" +
+							"753291864\n" +
+							"364927185\n" +
+							"281564793\n" +
+							"597138246\n" +
+							"678419352\n" +
+							"429375618\n" +
+							"135682479\n", 
+							sudoku.interpretResult(env));
+	}		
 }

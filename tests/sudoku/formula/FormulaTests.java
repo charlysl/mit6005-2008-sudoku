@@ -114,7 +114,7 @@ public class FormulaTests {
 		Formula f = getSampleFormula();
 		partial = new Env();
 		Var p = Var.makeVar("P");
-		Var r = Var.makeVar("R");
+//		Var r = Var.makeVar("R");
 		partial = partial.put(p, Bool.TRUE);
 //		partial = partial.put(r, Bool.TRUE);
 		solution = f.solve(partial);
