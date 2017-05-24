@@ -1,4 +1,4 @@
-package sudoku.test.set;
+package sudoku.set;
 
 import org.junit.Assert;
 import org.junit.Test;

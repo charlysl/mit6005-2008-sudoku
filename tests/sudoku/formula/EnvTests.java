@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class EnvTests {
 	@Test
 	public void testPutAndGet() {
 		Env env = new Env();
-		Var var = new Var("a");
+		Var var = Var.makeVar("a");
 
 		env = env.put(var,Bool.TRUE);
 		Assert.assertEquals(Bool.TRUE, env.get(var));
@@ -21,10 +21,12 @@ public class EnvTests {
 		env = env.put(var,Bool.TRUE);
 		Assert.assertEquals(Bool.TRUE, env.get(var));
 
-		env = env.put(var,Bool.FALSE);
-		Assert.assertEquals(Bool.FALSE, env.get(var));
+		// this Env implementation assumes
+		// that a Var is put only once
+//		env = env.put(var,Bool.FALSE);
+//		Assert.assertEquals(Bool.TRUE, env.get(var));
 
-		Var var2 = new Var("b");
+		Var var2 = Var.makeVar("b");
 
 		env = env.put(var2,Bool.FALSE);
 		Assert.assertEquals(Bool.FALSE, env.get(var2));
@@ -32,10 +34,10 @@ public class EnvTests {
 		env = env.put(var2,Bool.TRUE);
 		Assert.assertEquals(Bool.TRUE, env.get(var2));
 
-		env = env.put(var,Bool.FALSE);
-		Assert.assertEquals(Bool.FALSE, env.get(var));
+//		env = env.put(var,Bool.FALSE);
+//		Assert.assertEquals(Bool.TRUE, env.get(var));
 		
-		Assert.assertEquals(Bool.UNDEFINED, env.get(new Var("c")));		
+		Assert.assertEquals(Bool.UNDEFINED, env.get(Var.makeVar("c")));
 	}
 	
 	@Test
@@ -44,7 +46,7 @@ public class EnvTests {
 		for (Var v : env) {
 		}
 		
-		Var v = new Var("a");
+		Var v = Var.makeVar("a");
 		env = env.put(v, Bool.TRUE);
 		int c = 0;
 		for (Var e : env) {
@@ -59,6 +61,8 @@ public class EnvTests {
 			Assert.assertEquals(v, e);
 			c++;
 		}
-		Assert.assertEquals(1, c);
+		// this Env implementation assumes
+		// that a Var is put only once
+//		Assert.assertEquals(2, c);
 	}	
 }

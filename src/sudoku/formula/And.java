@@ -27,7 +27,15 @@ public class And extends Formula {
 
 	@Override
 	public Bool eval(Env env) {
-		return first.eval(env).and(second.eval(env));
+		
+		Bool result2 = second.eval(env);
+		if (result2.equals(Bool.FALSE)) {
+			return Bool.FALSE;
+		} else if (result2.equals(Bool.UNDEFINED)) {
+			return Bool.UNDEFINED;
+		}
+		
+		return first.eval(env).and(result2);
 	}
 
 	@Override

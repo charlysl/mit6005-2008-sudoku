@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,8 +16,8 @@ public class AndTests {
 
 	@Test
 	public void testConstructor() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		And f = new And(a,b);
 		Assert.assertEquals(a, f.getFirst());
 		Assert.assertEquals(b, f.getSecond());
@@ -25,8 +25,8 @@ public class AndTests {
 	
 	@Test
 	public void testVars() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		And f = new And(a,b);
 		Set<Var> vars = f.vars();
 		Assert.assertTrue(vars.contains(a));
@@ -35,8 +35,8 @@ public class AndTests {
 	
 	@Test
 	public void testEval() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		And f = new And(a,b);
 		Assert.assertEquals(Bool.TRUE,
 			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.TRUE)));
@@ -52,8 +52,8 @@ public class AndTests {
 	
 	@Test
 	public void testSolve() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		
 		Formula f = new And(a,b);
 		Env env = f.solve();
@@ -86,8 +86,8 @@ public class AndTests {
 		Assert.assertEquals("{a}{b}{c}", Formula.var("a")
 				.and(Formula.var("b")).and(Formula.var("c")).toString());
 		Assert.assertEquals("{ab}{cd}", new And(
-											new Or(new Var("a"),new Var("b")),
-											new Or(new Var("c"),new Var("d"))
+											new Or(Var.makeVar("a"),Var.makeVar("b")),
+											new Or(Var.makeVar("c"),Var.makeVar("d"))
 							).toString());
 	}
 }

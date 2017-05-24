@@ -6,12 +6,12 @@ public enum Bool {
 	UNDEFINED;
 
 	public Bool and(Bool b) {
-		if (this.equals(UNDEFINED) || b.equals(UNDEFINED)) {
-			return UNDEFINED;
+		if (this.equals(FALSE) || b.equals(FALSE)) {
+			return FALSE;
 		} else if (this.equals(TRUE) && b.equals(TRUE)) {
 			return TRUE;
 		} else {
-			return FALSE;
+			return UNDEFINED;
 		}
 	}
 	

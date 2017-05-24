@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,8 +15,8 @@ public class OrTests {
 
 	@Test
 	public void testConstructor() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		Or f = new Or(a,b);
 		Assert.assertEquals(a, f.getFirst());
 		Assert.assertEquals(b, f.getSecond());
@@ -24,8 +24,8 @@ public class OrTests {
 	
 	@Test
 	public void testVars() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		Or f = new Or(a,b);
 		Set<Var> vars = f.vars();
 		Assert.assertTrue(vars.contains(a));
@@ -34,8 +34,8 @@ public class OrTests {
 	
 	@Test
 	public void testEval() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 		Or f = new Or(a,b);
 		Assert.assertEquals(Bool.TRUE,
 			f.eval(new Env().put(a, Bool.TRUE).put(b,Bool.TRUE)));
@@ -49,8 +49,8 @@ public class OrTests {
 	
 	@Test
 	public void testSolve() {
-		Var a = new Var("a");
-		Var b = new Var("b");
+		Var a = Var.makeVar("a");
+		Var b = Var.makeVar("b");
 
 		Formula f;
 		Env env;
@@ -81,7 +81,7 @@ public class OrTests {
 	
 	@Test
 	public void testToString() {
-		Assert.assertEquals("{ab}", new Or(new Var("a"),new Var("b")).toString());
+		Assert.assertEquals("{ab}", new Or(Var.makeVar("a"),Var.makeVar("b")).toString());
 		Assert.assertEquals("{abc}", Formula.var("a")
 										.or(Formula.var("b"))
 										.or(Formula.var("c")).toString());

@@ -10,11 +10,15 @@ public abstract class Formula {
 		
 	private Env solve(Env env, Set<Var> variables) {
 		
-//		System.out.println("env: " + env);
-//		System.out.println("vars: " + variables);
 
 		Bool result = eval(env);
-//		System.out.println("result: " + result);
+
+//		System.out.println("env: " + env);
+//		System.out.println("vars: " + variables);
+//		System.out.println("result: " + result);	
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {}
 		
 		if (result.equals(Bool.TRUE)) {
 			return env;
@@ -60,7 +64,7 @@ public abstract class Formula {
 	abstract String buildString(String str);
 	
 	public static Formula var(String string) {
-		return new Var(string);
+		return Var.makeVar(string);
 	}
 
 	public Formula and(Formula f) {

@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,13 +20,13 @@ public class BoolTests {
 		Assert.assertEquals(
 				Bool.UNDEFINED, Bool.UNDEFINED.and(Bool.UNDEFINED));
 		Assert.assertEquals(
-				Bool.UNDEFINED, Bool.UNDEFINED.and(Bool.FALSE));
+				Bool.FALSE, Bool.UNDEFINED.and(Bool.FALSE));
 		Assert.assertEquals(
 				Bool.UNDEFINED, Bool.UNDEFINED.and(Bool.TRUE));
 		Assert.assertEquals(
 				Bool.UNDEFINED, Bool.TRUE.and(Bool.UNDEFINED));
 		Assert.assertEquals(
-				Bool.UNDEFINED, Bool.FALSE.and(Bool.UNDEFINED));
+				Bool.FALSE, Bool.FALSE.and(Bool.UNDEFINED));
 	}
 	
 

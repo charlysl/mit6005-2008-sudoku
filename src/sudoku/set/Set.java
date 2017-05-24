@@ -14,7 +14,7 @@ public class Set<T> implements Iterable<T> {
 	
 	// profiling showed that over 50% of the time was spent in Set#contains
 	// caching is an attempt to improve this
-	private Map<T,Boolean> containsCache = new HashMap<T,Boolean>();
+//	private Map<T,Boolean> containsCache = new HashMap<T,Boolean>();
 	
 	public Set(T t) {
 		rep = new Cons<T>(t, new EmptyList<T>());
@@ -94,21 +94,49 @@ public class Set<T> implements Iterable<T> {
 		// This is fine, because Set is immutable, so a hit will always be a hit,
 		// and a miss will always be a miss.
 		
-		Boolean result = containsCache.get(t);
-		if (result != null) {
-			return result;
-		}
-		
-		if (isEmpty()) {
-			result = Boolean.FALSE;
-		} else if (cons.getFirst().equals(t)) {
-			result = Boolean.TRUE;
-		} else {
-			result = new Set<T>(cons.getRest()).contains(t);			
-		}
+//		Boolean result = containsCache.get(t);
+//		if (result != null) {
+//			return result;
+//		}
+
+//		Boolean result;
+//		
+//		if (isEmpty()) {
+//			result = Boolean.FALSE;
+//		} else if (cons.getFirst().equals(t)) {
+//			result = Boolean.TRUE;
+//		} else {
+//			result = new Set<T>(cons.getRest()).contains(t);			
+//		}
 		
 		// cache result
-		containsCache.put(t, result);
+//		containsCache.put(t, result);
+		
+//		return result;
+
+
+		if (isEmpty()) {
+			return false;
+		} else {
+			return contains(t, cons);			
+		}
+	}
+	
+	private boolean contains(T t, Cons<T> list) {
+		boolean result;
+		
+		if (list.getFirst().equals(t)) {
+			result = true;
+		} else {
+			List<T> rest = list.getRest();
+			
+			if (rest instanceof EmptyList<?>) {
+				result = false;
+			} else {
+				result = contains(t, (Cons<T>) rest);				
+			}
+			
+		}
 		
 		return result;
 	}

@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,9 +17,9 @@ public class FormulaTests {
 	public void testSampleFormula() {
 		// (P v Q) ^ ('P v R)
 		
-		Var p = new Var("P");
-		Var q = new Var("Q");
-		Var r = new Var("R");
+		Var p = Var.makeVar("P");
+		Var q = Var.makeVar("Q");
+		Var r = Var.makeVar("R");
 		
 		Formula f = new And(new Or(p,q), new Or(new Not(p),r));
 		
@@ -36,9 +36,9 @@ public class FormulaTests {
 
 		Env env = f.solve();
 		
-		Var p = new Var("P");
-		Var q = new Var("Q");
-		Var r = new Var("R");
+		Var p = Var.makeVar("P");
+		Var q = Var.makeVar("Q");
+		Var r = Var.makeVar("R");
 
 		Assert.assertEquals(Bool.TRUE,
 				(env.get(p).or(env.get(q))) 
@@ -60,9 +60,9 @@ public class FormulaTests {
 		
 		// build formula
 		
-		Var s = new Var("Socrates");
-		Var h = new Var("Human");
-		Var m = new Var("Mortal");
+		Var s = Var.makeVar("Socrates");
+		Var h = Var.makeVar("Human");
+		Var m = Var.makeVar("Mortal");
 		
 		Formula f = new And(
 						new Or( new Not(s), h),
@@ -104,7 +104,7 @@ public class FormulaTests {
 
 	@Test
 	public void testPartialSolution() {
-		Var a = new Var("a");
+		Var a = Var.makeVar("a");
 		Env partial = new Env();
 		partial = partial.put(a, Bool.TRUE);
 		Env solution = a.solve(partial);
@@ -113,8 +113,8 @@ public class FormulaTests {
 		
 		Formula f = getSampleFormula();
 		partial = new Env();
-		Var p = new Var("P");
-		Var r = new Var("R");
+		Var p = Var.makeVar("P");
+		Var r = Var.makeVar("R");
 		partial = partial.put(p, Bool.TRUE);
 //		partial = partial.put(r, Bool.TRUE);
 		solution = f.solve(partial);
@@ -124,7 +124,7 @@ public class FormulaTests {
 	
 	@Test
 	public void testWrongPartialSolution() {
-		Var a = new Var("a");
+		Var a = Var.makeVar("a");
 		Env partial = new Env();
 		partial = partial.put(a, Bool.FALSE);
 		Assert.assertNull(a.solve(partial));

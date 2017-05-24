@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,13 +12,13 @@ public class VarTests {
 
 	@Test
 	public void testConstructor() {
-		Var f = new Var("a");
+		Var f = Var.makeVar("a");
 		Assert.assertEquals("a", f.getName());
 	}
 	
 	@Test
 	public void testVars() {
-		Var f = new Var("a");
+		Var f = Var.makeVar("a");
 		Set<Var> vars = f.vars();
 		
 		// check that f is in vars
@@ -27,7 +27,7 @@ public class VarTests {
 	
 	@Test 
 	public void testEval() {
-		Var f = new Var("a");
+		Var f = Var.makeVar("a");
 		
 		Env env = new Env().put(f, Bool.TRUE);
 		Assert.assertEquals(Bool.TRUE, f.eval(env));
@@ -41,7 +41,7 @@ public class VarTests {
 	
 	@Test
 	public void testSolveVarFormula() {
-		Var f = new Var("a");
+		Var f = Var.makeVar("a");
 		Env env = f.solve();
 		Assert.assertEquals(Bool.TRUE, env.get(f));
 		
@@ -50,34 +50,34 @@ public class VarTests {
 	
 	@Test
 	public void testEquals() {
-		Var a = new Var("A");
+		Var a = Var.makeVar("A");
 		Assert.assertEquals(a, a);
 		
-		Var b = new Var("A");
+		Var b = Var.makeVar("A");
 		Assert.assertEquals(a, b);
 		Assert.assertEquals(b, a);
 		
-		Var c = new Var("C");
+		Var c = Var.makeVar("C");
 		Assert.assertNotEquals(a, c);
 		Assert.assertNotEquals(c, a);
 	}
 
 	@Test
 	public void testHashCode() {
-		Var a = new Var("A");
+		Var a = Var.makeVar("A");
 		Assert.assertEquals(a.hashCode(), "A".hashCode());
 		
-		Var b = new Var("A");
+		Var b = Var.makeVar("A");
 		Assert.assertEquals(a.hashCode(), b.hashCode());
 		Assert.assertEquals(b.hashCode(), a.hashCode());
 		
-		Var c = new Var("C");
+		Var c = Var.makeVar("C");
 		Assert.assertNotEquals(a.hashCode(), c.hashCode());
 		Assert.assertNotEquals(c.hashCode(), a.hashCode());
 	}
 	
 	@Test
 	public void testToString() {
-		Assert.assertEquals("a", new Var("a").toString());
+		Assert.assertEquals("a", Var.makeVar("a").toString());
 	}
 }

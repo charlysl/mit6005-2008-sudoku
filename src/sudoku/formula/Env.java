@@ -1,91 +1,90 @@
 package sudoku.formula;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
-import sudoku.set.Set;
+import sudoku.list.Cons;
+import sudoku.list.EmptyList;
+import sudoku.list.List;
 
 public class Env implements Iterable<Var> {
 
-	Set<Var> trues; // contains all vars that are true
-	Set<Var> falses; // constains all vars that are false
-	
-	private Env(Set<Var> trues, Set<Var> falses) {
-		this.trues = trues;
-		this.falses = falses;
-	}
-	
-	public Env() {
-		this(new Set<Var>(), new Set<Var>());
-	}
+	// This rep is much much faster than List<Var>, which
+	// was creating a bottleneck because of contains, so much
+	// that profiling showed it hogging about 90% of the time.
+	private Map<Var,Bool> cache = new HashMap<Var,Bool>();
 	
 	public Env put(Var var, Bool b) {
-		
-		if ((b.equals(Bool.TRUE) && trues.contains(var)) 
-			|| (b.equals(Bool.FALSE) && falses.contains(var))) {
-			// var had already been set to b
-			return this;
-		}
 
-		return	b.equals(Bool.TRUE) 
-				? new Env(trues.add(var), 	falses.remove(var))
-				: new Env(trues.remove(var), falses.add(var));
+		Env env = new Env();
+		
+		// populate new env cache
+		for (Var v : cache.keySet()) {
+			env.cache.put(v, cache.get(v));
+		}
+		
+		// put var in the new cache
+		env.cache.put(var, b);
+		
+		return env;
+		
 	}
 
+//	static int nget;
+//	static int hits;
+	
 	public Bool get(Var var) {
-		if (trues.contains(var)) {
-			return Bool.TRUE;
-		} else if (falses.contains(var)) {
-			return Bool.FALSE;
+		
+		Bool result;
+		
+		result = cache.get(var);
+//		nget++;
+		if  (result != null) {
+//			hits++;
+//			System.out.println("In cache: " + var + "(" + result + ") " + hits + "/" + nget);
+			return result;
 		} else {
-			// This is the whole point of defining Bool
-			// instead of just using boolean, to be able 
-			// to return UNDEFINED if Var not put.
 			return Bool.UNDEFINED;
 		}
+		
 	}
-
+	
 	@Override
 	public String toString() {
-		return "TRUE" + trues.toString() + " " + "FALSE" + falses.toString();
+
+		StringBuilder trues = new StringBuilder();
+		StringBuilder falses = new StringBuilder();
+		
+		StringBuilder builder;
+		
+		for (Var v : cache.keySet()) {
+			if (cache.get(v).equals(Bool.TRUE)) {
+				builder = trues;
+			} else {
+				builder = falses;
+			}
+			
+			builder.append(v.toString());
+			
+		}
+		
+		trues.insert(0, "TRUE[");
+		trues.append("] FALSE[");
+		trues.append(falses);
+		trues.append("]");
+		
+		return trues.toString();
+		
 	}
 	
 	public int size() {
-		return trues.size() + falses.size();
+		return cache.size();
 	}
 
 	@Override
 	public Iterator<Var> iterator() {
-		return new Iterator<Var>() {
-			
-			// first iterate over trues, and then over falses
-			Iterator<Var> truesIter = trues.iterator();
-			Iterator<Var> falsesIter = falses.iterator();
-			boolean isTrues = true;
-			
-			@Override
-			public boolean hasNext() {
-				
-				// check if truesIter has been exhausted
-				if (isTrues && !truesIter.hasNext()) {
-					// switch to falsesIter
-					isTrues = false;
-				}
-				
-				return isTrues	? truesIter.hasNext()
-								: falsesIter.hasNext();
-				
-			}
-			
-			@Override
-			public Var next() {
-				return isTrues	? truesIter.next()
-								: falsesIter.next();
-			}
-			
-			@Override
-			public void remove() {
-				// empty
-			}
-		};
+		return cache.keySet().iterator();
+
 	}
 }

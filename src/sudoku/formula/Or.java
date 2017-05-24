@@ -27,7 +27,13 @@ public class Or extends Formula {
 
 	@Override
 	public Bool eval(Env env) {
-		return first.eval(env).or(second.eval(env));
+		
+		Bool result2 = second.eval(env);
+		if (result2.equals(Bool.TRUE)) {
+			return Bool.TRUE;
+		}
+		
+		return first.eval(env).or(result2);
 	}
 
 	@Override

@@ -1,13 +1,34 @@
 package sudoku.formula;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import sudoku.set.Set;
 
 public class Var extends Formula {
 
 	private String name;
 	
-	public Var(String name) {
+	private static Map<String,Var> instances = 
+							new HashMap<String,Var>();
+	
+	private Var(String name) {
 		this.name = name;
+	}
+	
+	public static Var makeVar(String name) {
+		// Factory method that performs interning.
+		//
+		// Thanks to interning, Vars are equal if they
+		// are the same object, so == can be used to
+		// implement equals, which should be faster
+		// than calling equals on the name strings.
+		Var instance = instances.get(name);
+		if (instance == null) {
+			instance = new Var(name);
+			instances.put(name, instance);
+		}
+		return instance;
 	}
 	
 	public String getName() {
@@ -36,18 +57,14 @@ public class Var extends Formula {
 	 * 
 	 * Given that Var is an immutable object, and its value is then just like a 
 	 * math value, it has no identity other that it's value; that is,
-	 * the {@link #name name} field. So, two different Var objects
-	 * are equal only if their names are equal.
+	 * the {@link #name name} field.
+	 * 
+	 * Due to interning, if 2 vars are ==, they are equal too.
+	 * 
 	 */
 	@Override
 	public boolean equals(Object o) {
-		
-		if (!(o instanceof Var)) {
-			return false;
-		}
-		
-		return getName().equals(((Var) o).getName());
-		
+		return this == o;		
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package sudoku.test.formula;
+package sudoku.formula;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,21 +13,21 @@ public class NotTests {
 
 	@Test
 	public void testConstructor() {
-		Var var = new Var("a");
+		Var var = Var.makeVar("a");
 		Not f = new Not(var);
 		Assert.assertEquals(var, f.getFormula());
 	}
 	
 	@Test
 	public void testVars() {
-		Var var = new Var("a");
+		Var var = Var.makeVar("a");
 		Not f = new Not(var);
 		Assert.assertTrue(f.vars().contains(var));
 	}
 	
 	@Test
 	public void testEval() {
-		Var var = new Var("a");
+		Var var = Var.makeVar("a");
 		Not f = new Not(var);
 		
 		Env env = new Env().put(var, Bool.FALSE);
@@ -42,7 +42,7 @@ public class NotTests {
 	
 	@Test
 	public void testSolve() {
-		Var var = new Var("a");
+		Var var = Var.makeVar("a");
 		Not f = new Not(var);
 		Env env = f.solve();
 		Assert.assertEquals(Bool.FALSE, env.get(var));
